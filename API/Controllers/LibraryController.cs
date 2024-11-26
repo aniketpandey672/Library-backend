@@ -252,6 +252,39 @@ namespace API.Controllers
             return Ok("not approved");
         }
 
+
+        [Authorize]
+        [HttpGet("RejectRequest")]
+        public ActionResult RejectRequest(int userId)
+        {
+            var user = Context.Users.Find(userId);
+
+            if (user is not null)
+            {
+                if (user.AccountStatus == AccountStatus.UNAPROOVED)
+                {
+                    user.AccountStatus = AccountStatus.REJECTED;
+                    Context.SaveChanges();
+
+                    EmailService.SendEmail(user.Email, "Account Approval Rejected", $"""
+                        <html>
+                            <body>
+                                <h2>Hi, {user.FirstName} {user.LastName}</h2>
+                                <h3>You Account approval request has been rejected by admin.</h3>
+                                <h3>Register again</h3>
+                            </body>
+                        </html>
+                    """);
+
+                    return Ok("Rejected");
+                }
+            }
+
+            return Ok("not approved");
+        }
+
+
+
         [Authorize]
         [HttpGet("GetOrders")]
         public ActionResult GetOrders()

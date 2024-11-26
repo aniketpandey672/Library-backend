@@ -20,7 +20,7 @@
 
     public enum AccountStatus
     {
-        UNAPROOVED, ACTIVE, BLOCKED
+        UNAPROOVED, ACTIVE, BLOCKED, REJECTED
     }
 
     public class BookCategory
